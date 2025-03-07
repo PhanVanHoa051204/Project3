@@ -1,0 +1,78 @@
+package com.financemanager.controller;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.financemanager.util.DatabaseConnection;
+
+/**
+ * Servlet implementation class UserServlet
+ */
+@WebServlet("/user")
+public class UserServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+    
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
+        
+        if ("register".equals(action)) {
+            registerUser(request, response);
+        } else if ("login".equals(action)) {
+            loginUser(request, response);
+        }
+    }
+    
+    private void registerUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String email = request.getParameter("email");
+        
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "INSERT INTO users (username, password_hash, email) VALUES (?, ?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            stmt.setString(3, email);
+            stmt.executeUpdate();
+            response.sendRedirect("login.jsp?success=1");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.sendRedirect("register.jsp?error=1");
+        }
+    }
+    
+    private void loginUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "SELECT user_id FROM users WHERE username = ? AND password_hash = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                HttpSession session = request.getSession();
+                session.setAttribute("user_id", rs.getInt("user_id"));
+                response.sendRedirect("dashboard.jsp");
+            } else {
+                response.sendRedirect("login.jsp?error=1");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.sendRedirect("login.jsp?error=1");
+        }
+    }
+
+}
