@@ -28,8 +28,8 @@
                 <td><%= category.getCategoryName() %></td>
                 <td><%= category.getUserId() %></td>
                 <td>
-                    <a href="updateCategory.jsp?category_id=${category.categoryId}" class="btn btn-warning">Edit</a>
-                    <a href="categories.jsp?id=<%= category.getCategoryId() %>" class="btn btn-danger btn-sm">Delete</a>
+                    <a href="updateCategory.jsp?category_id=<%= category.getCategoryId() %>" class="btn btn-warning btn-sm">Sửa</a>
+                    <a href="${pageContext.request.contextPath }/categories?action=delete&category_id=<%= category.getCategoryId() %>" class="btn btn-danger btn-sm" onclick= "return confirm ('Ban muon xoa chu');">Xoá</a>
                 </td>
             </tr>
             <% } %>
@@ -37,5 +37,6 @@
     </table>
 
     <a href="addcategory.jsp" class="btn btn-primary">Thêm danh mục</a>
+    <a href="${pageContext.request.contextPath}/dashboard.jsp" class="btn btn-primary">Quay lại</a>
 </body>
 </html>

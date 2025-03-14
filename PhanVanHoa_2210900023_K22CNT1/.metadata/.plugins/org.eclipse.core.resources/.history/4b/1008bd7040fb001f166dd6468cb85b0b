@@ -1,5 +1,0 @@
-package com.financemanager.util;
-
-public class DatabaseConnection {
-
-}

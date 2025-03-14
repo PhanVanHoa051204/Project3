@@ -20,8 +20,7 @@
 <body>
     <div class="container mt-4">
         <h2>Danh sách Mục tiêu tài chính</h2>
-        <a href="add_goal.jsp" class="btn btn-success">Thêm Mục tiêu</a>
-
+    
         <% if (goals == null || goals.isEmpty()) { %>
             <p class="mt-3 text-danger">Chưa có mục tiêu nào hoặc lỗi kết nối!</p>
         <% } else { %>
@@ -42,12 +41,18 @@
                         <td><%= goal.getTargetAmount() %></td>
                         <td><%= goal.getTargetDate() %></td>
                         <td>
-                            <a href="edit_goal.jsp?id=<%= goal.getGoalId() %>" class="btn btn-warning">Sửa</a>
-                            <a href="delete_goal?id=<%= goal.getGoalId() %>" class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a>
+                            <a href="updateGoals.jsp?goal_id=<%= goal.getGoalId() %>" class="btn btn-warning btn-sm">Sửa</a>
+                            <a
+								href="${pageContext.request.contextPath }/goals?action=delete&goal_id=<%= goal.getGoalId() %>"
+								class="btn btn-danger btn-sm"
+								onclick="return confirm ('Ban muon xoa chu');">Xoá</a></td>
+                            
                         </td>
                     </tr>
                 <% } %>
             </table>
+            <a href="${pageContext.request.contextPath}/TietKiem/addGoal.jsp" class="btn btn-success">Thêm Mục tiêu</a>
+            <a href="${pageContext.request.contextPath}/dashboard.jsp" class="btn btn-primary">Quay lại</a>
         <% } %>
     </div>
 </body>

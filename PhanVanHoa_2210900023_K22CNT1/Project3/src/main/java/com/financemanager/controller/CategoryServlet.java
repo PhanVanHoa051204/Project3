@@ -18,39 +18,76 @@ import com.financemanager.model.Category;
 @WebServlet("/categories")
 public class CategoryServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    private CategoryDAO categoryDAO;
+	private CategoryDAO categoryDAO;
 
-    public void init() {
-        try {
-            categoryDAO = new CategoryDAO();
-        } catch (Exception e) {
-            throw new RuntimeException("Error initializing CategoryDAO", e);
-        }
-    }
+	public void init() {
+		try {
+			categoryDAO = new CategoryDAO();
+		} catch (Exception e) {
+			throw new RuntimeException("Error initializing CategoryDAO", e);
+		}
+	}
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
-            throws ServletException, IOException {
-        List<Category> categories = categoryDAO.getAllCategories();
-        request.setAttribute("categories", categories);
-        request.getRequestDispatcher("/ChiTieu/categories.jsp").forward(request, response);
-    }
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String categoryName = request.getParameter("category_name");
-        int userId = Integer.parseInt(request.getParameter("user_id"));
-        
-        // Tạo đối tượng Category
-        Category category = new Category(0, categoryName, userId);
-        
-        // Thêm danh mục mới vào cơ sở dữ liệu
-        boolean isAdded = categoryDAO.addCategory(category);
+		String action = request.getParameter("action");
+		int cateId = Integer.parseInt(request.getParameter("category_id"));
+		if (action.equals("delete")) {
+			boolean isDelete = categoryDAO.deleteCategory(cateId);
+			if (isDelete) {
+				response.sendRedirect("/Project3/ChiTieu/categories.jsp");
+			} else {
 
-        if (isAdded) {
-            response.sendRedirect("/Project3/ChiTieu/categories.jsp");  // Điều hướng lại danh sách categories sau khi thêm
-        } else {
-        	
-            // Xử lý khi không thêm được, có thể thông báo lỗi cho người dùng
-            response.getWriter().println("Error while adding category.");
-        }
-    }
+				response.getWriter().println("Error while delete category.");
+			}
+		}
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	        throws ServletException, IOException {
+	    String action = request.getParameter("action");
+	    if (action == null) {
+	        response.sendRedirect("/Project3/ChiTieu/error.jsp");
+	        return;
+	    }
+
+	    String categoryName = request.getParameter("category_name");
+	    String userIdStr = request.getParameter("user_id");
+	    String cateIdStr = request.getParameter("category_id");
+
+	    // Kiểm tra và parse userId, cateId
+	    int userId = 0;
+	    int cateId = 0;
+	    try {
+	        userId = Integer.parseInt(userIdStr != null ? userIdStr : "0");
+	        cateId = Integer.parseInt(cateIdStr != null ? cateIdStr : "0");
+	    } catch (NumberFormatException e) {
+	        response.sendRedirect("/Project3/ChiTieu/categories.jsp");
+	        return;
+	    }
+
+	    // Kiểm tra categoryName
+	    if (categoryName == null || categoryName.trim().isEmpty()) {
+	        response.sendRedirect("/Project3/ChiTieu/categories.jsp");
+	        return;
+	    }
+
+	    Category category = new Category(cateId, categoryName, userId);
+	    if (action.equals("add")) {
+	        boolean isAdded = categoryDAO.addCategory(category);
+	        if (isAdded) {
+	            response.sendRedirect("/Project3/ChiTieu/categories.jsp");
+	        } else {
+	            response.sendRedirect("/Project3/ChiTieu/categories.jsp");
+	        }
+	    } else if (action.equals("update")) {
+	        boolean isUpdate = categoryDAO.updateCategory(category);
+	        if (isUpdate) {
+	            response.sendRedirect("/Project3/ChiTieu/categories.jsp");
+	        } else {
+	            response.sendRedirect("/Project3/ChiTieu/categories.jsp");
+	        }
+	    }
+	}
 }

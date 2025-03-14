@@ -1,0 +1,153 @@
+package com.financemanager.controller;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.financemanager.util.DatabaseConnection;
+
+/**
+ * Servlet implementation class UserServlet
+ */
+@WebServlet("/user")
+public class UserServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+    
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
+        
+        if ("register".equals(action)) {
+            registerUser(request, response);
+        } else if ("login".equals(action)) {
+            loginUser(request, response);
+        } else if ("update".equals(action)) {
+            updateUser(request, response);
+        }
+    }
+    
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
+        
+        if ("logout".equals(action)) {
+            logoutUser(request, response);
+        } else if ("delete".equals(action)) {
+            deleteUser(request, response);
+        }
+    }
+    
+    private void registerUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String email = request.getParameter("email");
+        
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "INSERT INTO users (username, password_hash, email) VALUES (?, ?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            stmt.setString(3, email);
+            stmt.executeUpdate();
+            response.sendRedirect("login.jsp?success=1");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.sendRedirect("register.jsp?error=1");
+        }
+    }
+    
+    private void loginUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "SELECT user_id FROM users WHERE username = ? AND password_hash = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                HttpSession session = request.getSession();
+                session.setAttribute("user_id", rs.getInt("user_id"));
+                response.sendRedirect("dashboard.jsp");
+            } else {
+                response.sendRedirect("login.jsp?error=1");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.sendRedirect("login.jsp?error=1");
+        }
+    }
+    
+    private void updateUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user_id") == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
+        
+        int userId = (int) session.getAttribute("user_id");
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String email = request.getParameter("email");
+        
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "UPDATE users SET username = ?, password_hash = ?, email = ? WHERE user_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            stmt.setString(3, email);
+            stmt.setInt(4, userId);
+            int rowsUpdated = stmt.executeUpdate();
+            
+            if (rowsUpdated > 0) {
+                response.sendRedirect("profile.jsp?success=1");
+            } else {
+                response.sendRedirect("profile.jsp?error=1");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.sendRedirect("profile.jsp?error=1");
+        }
+    }
+    
+    private void deleteUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user_id") == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
+        
+        int userId = (int) session.getAttribute("user_id");
+        
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "DELETE FROM users WHERE user_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, userId);
+            stmt.executeUpdate();
+            
+            // After deletion, invalidate session and redirect to login
+            session.invalidate();
+            response.sendRedirect("login.jsp?delete=1");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.sendRedirect("dashboard.jsp?error=1");
+        }
+    }
+    
+    private void logoutUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        response.sendRedirect("login.jsp?logout=1");
+    }
+}

@@ -38,8 +38,12 @@
                 <td><%= rt.getStartDate() %></td>
                 <td><%= rt.getEndDate() %></td>
                 <td>
-                    <a href="editRecurringTransaction.jsp?id=<%= rt.getRecurringTransactionId() %>" class="btn btn-warning btn-sm">Edit</a>
-                    <a href="deleteRecurringTransactionServlet?id=<%= rt.getRecurringTransactionId() %>" class="btn btn-danger btn-sm">Delete</a>
+                    <a href="updateRecurringTransaction.jsp?recurring_transaction_id=<%= rt.getRecurringTransactionId() %>" class="btn btn-warning btn-sm">Sửa</a>
+                    <a
+					href="${pageContext.request.contextPath }/recurringtransactions?action=delete&recurring_transaction_id=<%= rt.getRecurringTransactionId() %>"
+					class="btn btn-danger btn-sm"
+					onclick="return confirm ('Ban muon xoa chu');">Xoá</a>
+                    
                 </td>
             </tr>
             <% } %>
@@ -47,5 +51,7 @@
     </table>
 
     <a href="addRecurringTransaction.jsp" class="btn btn-primary">Thêm giao dịch định kỳ mới</a>
+    <a href="${pageContext.request.contextPath}/dashboard.jsp"
+		class="btn btn-primary">Quay lại</a>
 </body>
 </html>

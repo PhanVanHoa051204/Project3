@@ -1,0 +1,102 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ page import="com.financemanager.model.Transaction, java.util.*"%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quản lý giao dịch</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body class="container">
+	<h2 class="mt-4">Danh sách giao dịch</h2>
+
+	<%
+	String error = request.getParameter("error");
+	if ("invalid_input".equals(error)) {
+	%>
+	<div class="alert alert-danger mt-3" role="alert">Dữ liệu nhập
+		không hợp lệ. Vui lòng kiểm tra lại!</div>
+	<%
+	} else if ("add_failed".equals(error)) {
+	%>
+	<div class="alert alert-danger mt-3" role="alert">Thêm giao dịch
+		thất bại. Vui lòng thử lại!</div>
+	<%
+	} else if ("update_failed".equals(error)) {
+	%>
+	<div class="alert alert-danger mt-3" role="alert">Cập nhật giao
+		dịch thất bại. Vui lòng thử lại!</div>
+	<%
+	} else if ("delete_failed".equals(error)) {
+	%>
+	<div class="alert alert-danger mt-3" role="alert">Xóa giao dịch
+		thất bại. Vui lòng thử lại!</div>
+	<%
+	} else if ("invalid_transaction_id".equals(error)) {
+	%>
+	<div class="alert alert-danger mt-3" role="alert">Transaction ID
+		không hợp lệ. Vui lòng thử lại!</div>
+	<%
+	} else if ("invalid_action".equals(error)) {
+	%>
+	<div class="alert alert-danger mt-3" role="alert">Hành động không
+		hợp lệ. Vui lòng thử lại!</div>
+	<%
+	}
+	%>
+
+	<a href="addTransaction.jsp" class="btn btn-primary mb-3">Thêm giao
+		dịch</a>
+
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>Transaction ID</th>
+				<th>User ID</th>
+				<th>Category ID</th>
+				<th>Số tiền</th>
+				<th>Mô tả</th>
+				<th>Ngày giao dịch</th>
+				<th>Ngày tạo</th>
+				<th>Hành động</th>
+			</tr>
+		</thead>
+		<tbody>
+			<%
+			List<Transaction> transactions = (List<Transaction>) request.getAttribute("transactions");
+			if (transactions != null && !transactions.isEmpty()) {
+				for (Transaction transaction : transactions) {
+			%>
+			<tr>
+				<td><%=transaction.getTransactionId()%></td>
+				<td><%=transaction.getUserId()%></td>
+				<td><%=transaction.getCategoryId()%></td>
+				<td><%=transaction.getAmount()%></td>
+				<td><%=transaction.getDescription()%></td>
+				<td><%=transaction.getTransactionDate()%></td>
+				<td><%=transaction.getCreatedAt()%></td>
+				<td><a
+					href="updateTransaction.jsp?transaction_id=<%=transaction.getTransactionId()%>"
+					class="btn btn-warning btn-sm">Sửa</a> <a
+					href="${pageContext.request.contextPath}/transactions?action=delete&transaction_id=<%= transaction.getTransactionId() %>"
+					class="btn btn-danger btn-sm"
+					onclick="return confirm('Bạn muốn xóa giao dịch này không?');">Xóa</a>
+				</td>
+			</tr>
+			<%
+			}
+			} else {
+			%>
+			<tr>
+				<td colspan="8" class="text-center">Không có giao dịch nào.</td>
+			</tr>
+			<%
+			}
+			%>
+		</tbody>
+	</table>
+</body>
+</html>

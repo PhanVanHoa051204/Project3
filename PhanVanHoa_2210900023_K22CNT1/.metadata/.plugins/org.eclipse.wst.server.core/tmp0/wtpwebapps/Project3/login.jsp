@@ -103,6 +103,14 @@ a:hover {
 </head>
 <body>
     <h2>Đăng nhập</h2>
+    <% 
+        String error = request.getParameter("error");
+        if ("1".equals(error)) {
+    %>
+        <p style="color: red;">Mật khẩu không đúng. Vui lòng kiểm tra lại mật khẩu.</p>
+    <% } else if ("2".equals(error)) { %>
+        <p style="color: red;">Tên người dùng không tồn tại. Vui lòng kiểm tra lại tên người dùng.</p>
+    <% } %>
     <form action="user" method="post">
         <input type="hidden" name="action" value="login">
         <label>Username:</label>

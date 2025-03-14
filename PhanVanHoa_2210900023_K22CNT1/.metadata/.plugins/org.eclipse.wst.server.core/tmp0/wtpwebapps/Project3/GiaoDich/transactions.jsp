@@ -1,47 +1,60 @@
-<%@ page import="java.util.List, com.financemanager.model.Transaction, com.financemanager.dao.TransactionDAO" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page
+	import="java.util.List, com.financemanager.model.Transaction, com.financemanager.dao.TransactionDAO"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <html>
 <head>
-    <title>Giao Dịch</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<title>Giao Dịch</title>
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body class="container">
-    <h2 class="mt-4">Quản lý giao dịch</h2>
-    
-    <table class="table table-bordered mt-3">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Người dùng ID</th>
-                <th>Danh Mục ID</th>
-                <th>Giá</th>
-                <th>Mô Tả</th>
-                <th>Date</th>
-                <th>Chức Năng</th>
-            </tr>
-        </thead>
-        <tbody>
-            <%
-                TransactionDAO transactionDAO = new TransactionDAO();
-                List<Transaction> transactions = transactionDAO.getAllTransactions();
-                for (Transaction transaction : transactions) {
-            %>
-            <tr>
-                <td><%= transaction.getTransactionId() %></td>
-                <td><%= transaction.getUserId() %></td>
-                <td><%= transaction.getCategoryId() %></td>
-                <td><%= transaction.getAmount() %></td>
-                <td><%= transaction.getDescription() %></td>
-                <td><%= transaction.getTransactionDate() %></td>
-                <td>
-                    <a href="editTransaction.jsp?id=<%= transaction.getTransactionId() %>" class="btn btn-warning btn-sm">Edit</a>
-                    <a href="deleteTransactionServlet?id=<%= transaction.getTransactionId() %>" class="btn btn-danger btn-sm">Delete</a>
-                </td>
-            </tr>
-            <% } %>
-        </tbody>
-    </table>
+	<h2 class="mt-4">Quản lý giao dịch</h2>
 
-    <a href="addTransaction.jsp" class="btn btn-primary">Add New Transaction</a>
+	<table class="table table-bordered mt-3">
+		<thead class="table-dark">
+			<tr>
+				<th>ID</th>
+				<th>Người dùng ID</th>
+				<th>Danh Mục ID</th>
+				<th>Giá</th>
+				<th>Mô Tả</th>
+				<th>Date</th>
+				<th>Chức Năng</th>
+			</tr>
+		</thead>
+		<tbody>
+			<%
+			TransactionDAO transactionDAO = new TransactionDAO();
+			List<Transaction> transactions = transactionDAO.getAllTransactions();
+			for (Transaction transaction : transactions) {
+			%>
+			<tr>
+				<td><%=transaction.getTransactionId()%></td>
+				<td><%=transaction.getUserId()%></td>
+				<td><%=transaction.getCategoryId()%></td>
+				<td><%=transaction.getAmount()%></td>
+				<td><%=transaction.getDescription()%></td>
+				<td><%=transaction.getTransactionDate()%></td>
+				<td>
+				<a href="updateTransaction.jsp?transaction_id=<%=transaction.getTransactionId()%>"
+					class="btn btn-warning btn-sm">Sửa</a> 
+					
+				<a
+					href="${pageContext.request.contextPath }/transactions?action=delete&transaction_id=<%= transaction.getTransactionId() %>"
+					class="btn btn-danger btn-sm"
+					onclick="return confirm ('Ban muon xoa chu');">Xoá</a>	
+					
+			</td>
+			</tr>
+			<%
+			}
+			%>
+		</tbody>
+	</table>
+
+	<a href="addTransaction.jsp" class="btn btn-primary">Thêm mới giao
+		dịch</a>
+	<a href="${pageContext.request.contextPath}/dashboard.jsp"
+		class="btn btn-primary">Quay lại</a>
 </body>
 </html>

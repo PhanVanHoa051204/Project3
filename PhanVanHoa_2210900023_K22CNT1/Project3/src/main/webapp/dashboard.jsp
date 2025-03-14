@@ -1,236 +1,137 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Quản lý Chi Tiêu Cá Nhân</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Add your CSS here */
-        /* General reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin</title>
+<link rel="stylesheet" href="style.css">
 
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
-    color: #333;
-    line-height: 1.6;
-}
-
-/* Container for the entire dashboard */
-.container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 30px auto;
-}
-
-/* Header */
-header {
-    text-align: center;
-    margin-bottom: 40px;
-}
-
-header h1 {
-    font-size: 2.5em;
-    color: #4CAF50;
-    font-weight: bold;
-}
-
-/* Section for summary cards */
-.summary {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    margin-bottom: 40px;
-}
-
-.card {
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 30%;
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-.card h2 {
-    font-size: 1.6em;
-    color: #333;
-}
-
-.amount {
-    font-size: 3em;
-    color: #4CAF50;
-    font-weight: bold;
-}
-
-/* Section for categories */
-.categories {
-    margin-bottom: 40px;
-}
-
-.category-card {
-    background-color: #fff;
-    padding: 30px;
-    margin-bottom: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.category-card h3 {
-    font-size: 1.8em;
-    color: #333;
-}
-
-.category-amount {
-    font-size: 2.5em;
-    color: #2196F3;
-    font-weight: bold;
-}
-
-.category-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-/* Section for budget card */
-.budget {
-    margin-bottom: 40px;
-}
-
-.budget-card {
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.budget-card p {
-    font-size: 3em;
-    color: #FF5722;
-    font-weight: bold;
-}
-
-.budget-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-/* Footer */
-footer {
-    text-align: center;
-    margin-top: 50px;
-    font-size: 0.9em;
-    color: #888;
-}
-
-/* Button Styling */
-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 12px 24px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: #45a049;
-}
-
-.btn-danger {
-    background-color: #f44336;
-    color: white;
-}
-
-.btn-danger:hover {
-    background-color: #e53935;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .summary {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .card {
-        width: 80%;
-        margin-bottom: 20px;
-    }
-
-    .category-card {
-        width: 80%;
-        margin: 0 auto;
-    }
-
-    .budget-card {
-        width: 80%;
-        margin: 0 auto;
-    }
-}
-
-        
-    </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Quản lý Chi Tiêu Cá Nhân</h1>
-        </header>
+	<div class="container">
+		<!-- Sidebar -->
+		<div class="sidebar">
+			<div class="logo">Admin</div>
+			<ul>
+				<li class="active"><a href="#">Quản trị</a></li>
+				<li><a class=""
+					href="${pageContext.request.contextPath}/NguoiDung/users.jsp">Quản
+						lý người dùng</a></li>
+				<li><a class=""
+					href="${pageContext.request.contextPath}/ChiTieu/categories.jsp">Quản
+						lý chi tiêu</a></li>
+				<li><a class=""
+					href="${pageContext.request.contextPath}/NganSach/budgets.jsp">Quản
+						lý ngân sách</a></li>
+				<li><a
+					href="${pageContext.request.contextPath}/GiaoDich/transactions.jsp">Quản
+						lý giao dịch</a></li>
+				<li><a
+					href="${pageContext.request.contextPath}/GDDinhKy/recurringtransactions.jsp">Quản
+						lý giao dịch định kỳ</a></li>
+				<li><a
+					href="${pageContext.request.contextPath}/TietKiem/goals.jsp">Tiết
+						kiệm</a></li>
+				<li><a href="https://web.facebook.com/PhanHoa05122004">Liên
+						hệ</a></li>
 
-        <section class="summary">
-            <div class="card">
-                <h2>Tổng Chi Tiêu</h2>
-                <p class="amount">${requestScope.totalExpenses}</p>
-            </div>
-            <div class="card">
-                <h2>Chi Tiêu Tháng Này</h2>
-                <p class="amount">${requestScope.monthlyExpenses}</p>
-            </div>
-            <div class="card">
-                <h2>Tổng Tiết Kiệm</h2>
-                <p class="amount">${requestScope.totalSavings}</p>
-            </div>
-        </section>
+			</ul>
+		</div>
 
-        <section class="categories">
-            <h2>Chi Tiêu Theo Danh Mục</h2>
-            <div class="category-card">
-                <h3>Ăn Uống</h3>
-                <p class="category-amount">${requestScope.budget_1}</p> <!-- Thay 1 bằng ID danh mục thực tế -->
-            </div>
-            <div class="category-card">
-                <h3>Giải Trí</h3>
-                <p class="category-amount">${requestScope.budget_2}</p> <!-- Thay 2 bằng ID danh mục thực tế -->
-            </div>
-            <div class="category-card">
-                <h3>Hóa Đơn</h3>
-                <p class="category-amount">${requestScope.budget_3}</p> <!-- Thay 3 bằng ID danh mục thực tế -->
-            </div>
-        </section>
+		<!-- Main Content -->
+		<div class="main-content">
+			<header>
+				<div class="">
+					<!-- <input type="" placeholder=""> -->
+				</div>
+				<div class="submit-section">
+					<a href="login.jsp" class="logout-btn">Đăng xuất</a>
+				</div>
+			</header>
 
-        <button class="btn-danger" onclick="window.location.href='user?action=logout'">Đăng Xuất</button>
+			<!-- <!-- Dashboard Content -->
+			<div class="dashboard-content">
+				<h2>Chào mừng đến với trang Admin</h2>
 
-        <footer>
-            <p>© 2025 Quản lý Chi Tiêu Cá Nhân</p>
-        </footer>
-    </div>
+
+				<div class="cards">
+					<div class="card">
+						<h3>Sales Today</h3>
+						<p>145</p>
+						<span class="increase">12% increase</span>
+					</div>
+					<div class="card">
+						<h3>Revenue This Month</h3>
+						<p>$3,264</p>
+						<span class="increase">8% increase</span>
+					</div>
+					<div class="card">
+						<h3>Customers This Year</h3>
+						<p>1,244</p>
+						<span class="decrease">12% decrease</span>
+					</div>
+				</div>
+
+				Reports Chart
+				<div class="chart-section">
+					<h3>Reports | Today</h3>
+					<canvas id="reportsChart"></canvas>
+				</div>
+
+				Recent Activity
+				<div class="recent-activity">
+					<h3>Recent Activity | Today</h3>
+					<ul>
+						<li><span class="dot green"></span>32 min - Quia quaerere rem
+							explicabo officiis beatae</li>
+						<li><span class="dot red"></span>56 min - Voluptatem
+							blanditiis blanditiis eveniet</li>
+						<li><span class="dot blue"></span>2 hrs - Voluptates corrupti
+							molestias voluptatem</li>
+						<li><span class="dot yellow"></span>1 day - Tempore autem
+							saepe occaecati voluptatem tempore</li>
+					</ul>
+				</div>
+
+				Budget Report
+				<div class="budget-report">
+					<h3>Budget Report | This Month</h3>
+					<canvas id="budgetChart"></canvas>
+				</div>
+
+				Recent Sales
+				<div class="recent-sales">
+					<h3>Recent Sales | Today</h3>
+					<table>
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Product</th>
+								<th>Price</th>
+								<th>Time</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>#123</td>
+								<td>Product A</td>
+								<td>$50</td>
+								<td>10:00 AM</td>
+							</tr>
+
+						</tbody>
+					</table>
+					<div class="table-footer">
+						<select>
+							<option>10 entries per page</option>
+						</select> <input type="text" placeholder="Search...">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
 </body>
 </html>

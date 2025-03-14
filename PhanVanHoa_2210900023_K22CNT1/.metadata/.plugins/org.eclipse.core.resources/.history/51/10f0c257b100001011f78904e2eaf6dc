@@ -1,0 +1,112 @@
+package com.financemanager.controller;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.financemanager.dao.UserDao;
+import com.financemanager.model.User;
+
+/**
+ * Servlet implementation class PvhUserServlet
+ */
+@WebServlet("/PvhUserServlet")
+public class PvhUserServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+    private UserDao userDao = new UserDao();
+
+    // Phương thức xử lý POST
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
+        if ("add".equals(action)) {
+            addUser(request, response);
+        } else if ("update".equals(action)) {
+            updateUser(request, response);
+        } else if ("delete".equals(action)) {
+            deleteUser(request, response);
+        }
+    }
+
+    // Phương thức thêm người dùng
+    private void addUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session == null || !"admin".equals(session.getAttribute("role"))) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
+
+        // Lấy thông tin từ form
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String email = request.getParameter("email");
+        String role = request.getParameter("role");
+
+        // Tạo đối tượng User
+        User user = new User();
+        user.setUsername(username);
+        user.setPasswordHash(password);  // Lưu ý: cần mã hóa mật khẩu nếu cần
+        user.setEmail(email);
+        user.setRole(role);
+
+        // Thêm người dùng vào cơ sở dữ liệu
+        if (userDao.addUser(user)) {
+            response.sendRedirect("/Project3/NguoiDung/users.jsp");  // Chuyển hướng đến danh sách người dùng
+        } else {
+            response.getWriter().println("Error while adding user.");
+        }
+    }
+
+    // Phương thức cập nhật người dùng
+    private void updateUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session == null || !"admin".equals(session.getAttribute("role"))) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
+
+        // Lấy thông tin từ form
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String email = request.getParameter("email");
+        String role = request.getParameter("role");
+        int userId = Integer.parseInt(request.getParameter("user_id"));
+
+        // Tạo đối tượng User và thiết lập các giá trị
+        User user = new User();
+        user.setUserId(userId);
+        user.setUsername(username);
+        user.setPasswordHash(password);  // Lưu ý: cần mã hóa mật khẩu nếu cần
+        user.setEmail(email);
+        user.setRole(role);
+
+        // Cập nhật thông tin người dùng trong cơ sở dữ liệu
+        if (userDao.updateUser(user)) {
+            response.sendRedirect("/Project3/NguoiDung/users.jsp");  // Chuyển hướng đến danh sách người dùng
+        } else {
+            response.getWriter().println("Error while updating user.");
+        }
+    }
+
+    // Phương thức xóa người dùng
+    private void deleteUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session == null || !"admin".equals(session.getAttribute("role"))) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
+
+        // Lấy ID người dùng cần xóa
+        int userId = Integer.parseInt(request.getParameter("user_id"));
+        
+        // Xóa người dùng khỏi cơ sở dữ liệu
+        if (userDao.deleteUser(userId)) {
+            response.sendRedirect("/Project3/NguoiDung/users.jsp");  // Chuyển hướng đến danh sách người dùng
+        } else {
+            response.getWriter().println("Error while deleting user.");
+        }
+    }
+}

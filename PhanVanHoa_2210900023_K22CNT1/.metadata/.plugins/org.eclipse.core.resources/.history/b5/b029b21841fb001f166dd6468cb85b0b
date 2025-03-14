@@ -1,5 +1,0 @@
-package com.financemanager.dao;
-
-public class RecurringTransactionDAO {
-
-}

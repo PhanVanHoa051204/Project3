@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.financemanager.model.RecurringTransaction;
+import com.financemanager.util.DatabaseConnection;
 
 public class RecurringTransactionDAO {
 	private static final String ADD_RECURRING_TRANSACTION = "INSERT INTO recurring_transactions (user_id, category_id, amount, description, frequency, start_date, end_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -112,14 +113,16 @@ public class RecurringTransactionDAO {
         return false;
     }
 
-    public boolean deleteRecurringTransaction(int transactionId) {
-        try (PreparedStatement pstmt = connection.prepareStatement(DELETE_RECURRING_TRANSACTION)) {
-            pstmt.setInt(1, transactionId);
-            return pstmt.executeUpdate() > 0;
+    public boolean deleteRecurringTransaction(int recurringTransactionId) {
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement("DELETE FROM recurring_transactions WHERE recurring_transaction_id = ?")) {
+            pstmt.setInt(1, recurringTransactionId);
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
-        return false;
     }
     public void close() {
         try {
