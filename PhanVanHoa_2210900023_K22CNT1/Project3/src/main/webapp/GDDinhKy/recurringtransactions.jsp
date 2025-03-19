@@ -12,14 +12,15 @@
         <thead class="table-dark">
             <tr>
                 <th>ID</th>
-                <th>User ID</th>
-                <th>Category ID</th>
-                <th>Amount</th>
-                <th>Description</th>
-                <th>Frequency</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Action</th>
+				<th>ID Người dùng</th>
+				<th>ID Danh mục</th>
+				<th>Số tiền</th>
+				<th>Mô tả</th>
+				<th>Tần suất</th>
+				<th>Ngày bắt đầu</th>
+				<th>Ngày kết thúc</th>
+				<th>Hành động</th>
+
             </tr>
         </thead>
         <tbody>

@@ -1,0 +1,63 @@
+package com.financemanager.controller;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+@WebServlet("/AddSavingServlet")
+public class PvhAddSavingServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("userId") == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
+
+        int userId = (Integer) session.getAttribute("userId");
+        int goalId = Integer.parseInt(request.getParameter("goalId"));
+        double savingAmount = Double.parseDouble(request.getParameter("savingAmount"));
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+
+        try {
+            String jdbcURL = "jdbc:mysql://localhost:3306/tietkiem_db?useSSL=false";
+            String jdbcUsername = "root";
+            String jdbcPassword = "yourpassword";
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
+
+            // Cập nhật số tiền tiết kiệm trong bảng goals
+            String sql = "UPDATE goals SET current_amount = current_amount + ? WHERE goal_id = ? AND user_id = ?";
+            statement = connection.prepareStatement(sql);
+            statement.setDouble(1, savingAmount);
+            statement.setInt(2, goalId);
+            statement.setInt(3, userId);
+
+            int rowsUpdated = statement.executeUpdate();
+            if (rowsUpdated > 0) {
+                response.sendRedirect("profile.jsp");
+            } else {
+                request.setAttribute("errorMessage", "Không tìm thấy mục tiêu tiết kiệm hoặc bạn không có quyền truy cập!");
+                request.getRequestDispatcher("profile.jsp").forward(request, response);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("errorMessage", "Lỗi: " + e.getMessage());
+            request.getRequestDispatcher("profile.jsp").forward(request, response);
+        } finally {
+            if (statement != null) try { statement.close(); } catch (Exception e) { e.printStackTrace(); }
+            if (connection != null) try { connection.close(); } catch (Exception e) { e.printStackTrace(); }
+        }
+    }
+}

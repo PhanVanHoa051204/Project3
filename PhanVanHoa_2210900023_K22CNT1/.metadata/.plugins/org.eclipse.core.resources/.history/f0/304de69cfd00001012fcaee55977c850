@@ -1,0 +1,156 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - NiceAdmin</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">NiceAdmin</div>
+            <ul>
+                <li class="active"><a href="dashboard.jsp"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="${pageContext.request.contextPath}/NguoiDung/users.jsp"><i class="fas fa-users"></i> Quản lý người dùng</a></li>
+                <li><a href="${pageContext.request.contextPath}/ChiTieu/categories.jsp"><i class="fas fa-tags"></i> Quản lý chi tiêu</a></li>
+                <li><a href="${pageContext.request.contextPath}/NganSach/budgets.jsp"><i class="fas fa-wallet"></i> Quản lý ngân sách</a></li>
+                <li><a href="${pageContext.request.contextPath}/GiaoDich/transactions.jsp"><i class="fas fa-exchange-alt"></i> Quản lý giao dịch</a></li>
+                <li><a href="${pageContext.request.contextPath}/GDDinhKy/recurringtransactions.jsp"><i class="fas fa-sync-alt"></i> Quản lý giao dịch định kỳ</a></li>
+                <li><a href="${pageContext.request.contextPath}/TietKiem/goals.jsp"><i class="fas fa-piggy-bank"></i> Tiết kiệm</a></li>
+                <li><a href="https://web.facebook.com/PhanHoa05122004"><i class="fas fa-address-book"></i> Liên hệ</a></li>
+            </ul>
+        </aside>
+            <%-- <ul>
+                <li class="active"><a href="dashboard.jsp"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="${pageContext.request.contextPath}/NguoiDung/users.jsp"><i class="fas fa-users"></i> Quản lý người dùng</a></li>
+                <li><a href="${pageContext.request.contextPath}/ChiTieu/categories.jsp"><i class="fas fa-tags"></i> Quản lý chi tiêu</a></li>
+                <li><a href="${pageContext.request.contextPath}/NganSach/budgets.jsp"><i class="fas fa-wallet"></i> Quản lý ngân sách</a></li>
+                <li><a href="${pageContext.request.contextPath}/GiaoDich/transactions.jsp"><i class="fas fa-exchange-alt"></i> Quản lý giao dịch</a></li>
+                <li><a href="${pageContext.request.contextPath}/GDDinhKy/recurringtransactions.jsp"><i class="fas fa-sync-alt"></i> Quản lý giao dịch định kỳ</a></li>
+                <li><a href="${pageContext.request.contextPath}/TietKiem/goals.jsp"><i class="fas fa-piggy-bank"></i> Tiết kiệm</a></li>
+                <li><a href="https://web.facebook.com/PhanHoa05122004"><i class="fas fa-address-book"></i> Liên hệ</a></li>
+            </ul> --%>
+        
+
+        <div class="col-md-10">
+                <div class="row">
+                    <!-- Sales Widget -->
+                    <div class="col-md-3">
+                        <div class="dashboard-card">
+                            <h5 class="card-title">Sales | Today</h5>
+                            <h3>145</h3>
+                            <p>12% increase</p>
+                        </div>
+                    </div>
+                    <!-- Revenue Widget -->
+                    <div class="col-md-3">
+                        <div class="dashboard-card">
+                            <h5 class="card-title">Revenue | This Month</h5>
+                            <h3>$3,264</h3>
+                            <p>8% increase</p>
+                        </div>
+                    </div>
+                    <!-- Customers Widget -->
+                    <div class="col-md-3">
+                        <div class="dashboard-card">
+                            <h5 class="card-title">Customers | This Year</h5>
+                            <h3>1,244</h3>
+                            <p>12% decrease</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Reports Chart -->
+                    <div class="col-md-8">
+                        <div class="dashboard-card">
+                            <h5 class="card-title">Reports | Today</h5>
+                            <canvas id="reportsChart" class="reports-chart"></canvas>
+                        </div>
+                    </div>
+                    <!-- Budget Chart -->
+                    <div class="col-md-4">
+                        <div class="dashboard-card">
+                            <h5 class="card-title">Budget Report | This Month</h5>
+                            <canvas id="budgetChart" class="budget-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Recent Activity -->
+                    <div class="col-md-12">
+                        <div class="dashboard-card">
+                            <h5 class="card-title">Recent Activity | Today</h5>
+                            <ul>
+                                <li>32 min ago - Quia quae rerum explicabo officiis beatae</li>
+                                <li>56 min ago - Voluptatem blanditiis blanditiis eveniet</li>
+                                <li>2 hrs ago - Voluptates corrupti molestias voluptatem</li>
+                                <li>1 day ago - Tempore autem saepe occaecati voluptatem tempore</li>
+                                <li>2 days ago - Est sit eum reiciendis exercitationem</li>
+                                <li>4 weeks ago - Dicta dolorem harum nulla eius.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9gybV6jfcW4gCUqzJb2j6Ltvw2Xj9bb9+I6xr2vSZ+nxGzjphT6" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0vxF0QoxmRr2flF6eV7n1tP4w8fak5CmFybwM2uJf2abj6fi" crossorigin="anonymous"></script>
+
+    <!-- Charts -->
+    <script>
+        var ctxReports = document.getElementById('reportsChart').getContext('2d');
+        var reportsChart = new Chart(ctxReports, {
+            type: 'line',
+            data: {
+                labels: ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00'],
+                datasets: [{
+                    label: 'Sales',
+                    data: [20, 30, 40, 50, 60, 70],
+                    borderColor: 'blue',
+                    fill: false
+                }, {
+                    label: 'Customers',
+                    data: [10, 20, 30, 40, 50, 60],
+                    borderColor: 'green',
+                    fill: false
+                }, {
+                    label: 'Revenue',
+                    data: [5, 15, 25, 35, 45, 55],
+                    borderColor: 'orange',
+                    fill: false
+                }]
+            }
+        });
+
+        var ctxBudget = document.getElementById('budgetChart').getContext('2d');
+        var budgetChart = new Chart(ctxBudget, {
+            type: 'radar',
+            data: {
+                labels: ['Sales', 'Marketing', 'Development', 'Budget', 'Technology'],
+                datasets: [{
+                    label: 'Allocated Budget',
+                    data: [45, 25, 35, 40, 30],
+                    borderColor: 'green',
+                    fill: true
+                }, {
+                    label: 'Actual Spending',
+                    data: [40, 20, 30, 35, 25],
+                    borderColor: 'blue',
+                    fill: true
+                }]
+            }
+        });
+    </script>
+</body>
+</html>

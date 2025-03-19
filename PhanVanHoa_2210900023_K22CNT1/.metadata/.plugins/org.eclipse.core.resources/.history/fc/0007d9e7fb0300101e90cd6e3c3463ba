@@ -1,0 +1,174 @@
+/* Reset mặc định */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Container chính */
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background-color: #343a40;
+    color: white;
+    position: fixed;
+    height: 100vh;
+    padding-top: 20px;
+}
+
+.sidebar .logo {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    padding: 10px 0;
+    border-bottom: 1px solid #495057;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 10px 0;
+}
+
+.sidebar ul li {
+    padding: 15px 20px;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar ul li a:hover {
+    background-color: #495057;
+    border-radius: 5px;
+}
+
+/* Header cố định */
+.fixed-header {
+    position: fixed;
+    top: 0;
+    left: 250px; /* Đẩy sang phải để không đè lên sidebar */
+    right: 0;
+    background-color: #343a40;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.fixed-header h1 {
+    font-size: 24px;
+    margin: 0;
+}
+
+.submit-section .logout-btn {
+    background-color: #dc3545;
+    color: white;
+    padding: 8px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.submit-section .logout-btn:hover {
+    background-color: #c82333;
+}
+
+/* Nội dung chính */
+.container.text-center {
+    margin-left: 250px; /* Đẩy nội dung sang phải để không đè sidebar */
+    padding: 80px 20px 20px; /* Đẩy xuống dưới header */
+    width: calc(100% - 250px);
+}
+
+.dashboard-content {
+    margin-bottom: 20px;
+}
+
+.card.stats-card {
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.card-icon {
+    font-size: 30px;
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+.card-content h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.card-content .stats-value {
+    font-size: 16px;
+    color: #6c757d;
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.table thead th {
+    background-color: #343a40;
+    color: white;
+    text-align: center;
+}
+
+.table tbody tr th,
+.table tbody tr td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+    }
+    .fixed-header {
+        left: 200px;
+    }
+    .container.text-center {
+        margin-left: 200px;
+        width: calc(100% - 200px);
+    }
+}
+
+@media (max-width: 576px) {
+    .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+    }
+    .fixed-header {
+        left: 0;
+        position: static;
+    }
+    .container.text-center {
+        margin-left: 0;
+        width: 100%;
+        padding: 20px;
+    }
+    .table {
+        font-size: 14px;
+    }
+}

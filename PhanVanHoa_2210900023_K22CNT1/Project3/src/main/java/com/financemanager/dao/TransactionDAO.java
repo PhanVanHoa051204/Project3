@@ -18,6 +18,7 @@ public class TransactionDAO {
     private static final String GET_TRANSACTION_BY_ID = "SELECT * FROM transactions WHERE transaction_id = ?";
     private static final String UPDATE_TRANSACTION = "UPDATE transactions SET user_id = ?, category_id = ?, amount = ?, description = ?, transaction_date = ? WHERE transaction_id = ?";
     private static final String DELETE_TRANSACTION = "DELETE FROM transactions WHERE transaction_id = ?";
+    private static final String GET_TRANSACTION_BY_USER_ID = "SELECT * FROM transactions WHERE user_id = ?";
 
     private Connection connection;
 
@@ -60,6 +61,29 @@ public class TransactionDAO {
         }
         return transactions;
     }
+    
+    public List<Transaction> getAllTransactionsByUserId(int Id) {
+        List<Transaction> transactions = new ArrayList<>();
+        try (PreparedStatement pstmt = connection.prepareStatement(GET_TRANSACTION_BY_USER_ID)) {
+            pstmt.setInt(1, Id); // Sử dụng tham số userId
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) { // Lặp qua tất cả bản ghi
+                    Transaction transaction = new Transaction();
+                    transaction.setTransactionId(rs.getInt("transaction_id"));
+                    transaction.setUserId(rs.getInt("user_id"));
+                    transaction.setCategoryId(rs.getInt("category_id"));
+                    transaction.setAmount(rs.getDouble("amount"));
+                    transaction.setDescription(rs.getString("description"));
+                    transaction.setTransactionDate(rs.getDate("transaction_date").toLocalDate());
+                    transactions.add(transaction); // Thêm vào danh sách
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return transactions; // Trả về danh sách
+    }
+    
 
     // Lấy giao dịch theo ID
     public Transaction getTransactionById(int transactionId) {

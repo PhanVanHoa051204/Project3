@@ -74,9 +74,9 @@
         </div>
 		
         <div class="form-group">
-            <label for="category_id">Category ID:</label>
+            <label for="category_id">Chi tiêu ID:</label>
             <select id="category_id" name="category_id" class="form-control" required>
-                <option value="" disabled>Chọn Category ID</option>
+                <option value="" disabled>Chọn Chi Tiêu ID</option>
                 <%
                     CategoryDAO categoryDAO = new CategoryDAO();
                     List<Category> categories = categoryDAO.getAllCategories();

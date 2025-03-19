@@ -119,6 +119,6 @@
     </form>
 
     <!-- Nút quay lại -->
-    <a href="${pageContext.request.contextPath}/budgets" class="btn btn-secondary mt-3">Quay lại</a>
+    <a href="budgets.jsp" class="btn btn-secondary mt-3">Quay lại</a>
 </body>
 </html>

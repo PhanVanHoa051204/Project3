@@ -18,6 +18,7 @@ public class RecurringTransactionDAO {
     private static final String GET_RECURRING_TRANSACTION_BY_ID = "SELECT * FROM recurring_transactions WHERE recurring_transaction_id = ?";
     private static final String UPDATE_RECURRING_TRANSACTION = "UPDATE recurring_transactions SET user_id = ?, category_id = ?, amount = ?, description = ?, frequency = ?, start_date = ?, end_date = ? WHERE recurring_transaction_id = ?";
     private static final String DELETE_RECURRING_TRANSACTION = "DELETE FROM recurring_transactions WHERE recurring_transaction_id = ?";
+    private static final String GET_RECURRING_TRANSACTION_BY_USER_ID = "SELECT * FROM recurring_transactions WHERE user_id = ?";
     private Connection connection;
 
     // Constructor khởi tạo kết nối CSDL
@@ -71,6 +72,30 @@ public class RecurringTransactionDAO {
             e.printStackTrace();
         }
         return transactions;
+    }
+    
+    public List<RecurringTransaction> getAllRecurringTransactionsByUserId(int Id) {
+        List<RecurringTransaction> transactions = new ArrayList<>();
+        try (PreparedStatement pstmt = connection.prepareStatement(GET_RECURRING_TRANSACTION_BY_USER_ID)) {
+            pstmt.setInt(1, Id); 
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) { // Lặp qua tất cả bản ghi
+                    RecurringTransaction transaction = new RecurringTransaction();
+                    transaction.setRecurringTransactionId(rs.getInt("recurring_transaction_id"));
+                    transaction.setUserId(rs.getInt("user_id"));
+                    transaction.setCategoryId(rs.getInt("category_id"));
+                    transaction.setAmount(rs.getDouble("amount"));
+                    transaction.setDescription(rs.getString("description"));
+                    transaction.setFrequency(rs.getString("frequency"));
+                    transaction.setStartDate(rs.getDate("start_date"));
+                    transaction.setEndDate(rs.getDate("end_date"));
+                    transactions.add(transaction); // Thêm vào danh sách
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return transactions; // Trả về danh sách
     }
 
     public RecurringTransaction getRecurringTransactionById(int transactionId) {

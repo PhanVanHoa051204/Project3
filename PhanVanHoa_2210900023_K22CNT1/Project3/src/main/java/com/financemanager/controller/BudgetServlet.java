@@ -48,7 +48,7 @@ public class BudgetServlet extends HttpServlet {
             // Hiển thị danh sách ngân sách
             List<Budget> budgets = budgetDAO.getAllBudgets();
             request.setAttribute("budgets", budgets);
-            request.getRequestDispatcher("/NganSach/budgets.jsp").forward(request, response);
+            request.getRequestDispatcher("/Project3/NganSach/budgets.jsp").forward(request, response);
         }
     }
 

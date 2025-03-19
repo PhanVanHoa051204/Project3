@@ -17,6 +17,7 @@ public class GoalDAO {
     private static final String GET_GOAL_BY_ID = "SELECT * FROM goals WHERE goal_id = ?";
     private static final String UPDATE_GOAL = "UPDATE goals SET goal_name = ?, target_amount = ?, current_amount = ?, target_date = ? WHERE goal_id = ?";
     private static final String DELETE_GOAL = "DELETE FROM goals WHERE goal_id = ?";
+    private static final String GET_ALL_GOALS_BY_USER_ID = "SELECT * FROM goals WHERE user_id = ?";
     private Connection connection;
 
     public GoalDAO() {
@@ -58,6 +59,29 @@ public class GoalDAO {
             e.printStackTrace();
         }
         return goals;
+    }
+    
+    public List<Goal> getAllGoalsByUserId(int Id) {
+        List<Goal> goals = new ArrayList<>();
+        try (PreparedStatement pstmt = connection.prepareStatement(GET_ALL_GOALS_BY_USER_ID)) {
+            pstmt.setInt(1, Id); 
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) { // Lặp qua tất cả bản ghi
+                    Goal goal = new Goal();
+                    goal.setGoalId(rs.getInt("goal_id"));
+                    goal.setUserId(rs.getInt("user_id"));
+                    goal.setGoalName(rs.getString("goal_name"));
+                    goal.setTargetAmount(rs.getDouble("target_amount"));
+                    goal.setCurrentAmount(rs.getDouble("current_amount"));
+                    goal.setTargetDate(rs.getDate("target_date"));
+                    goal.setCreatedAt(rs.getDate("created_at"));
+                    goals.add(goal); // Thêm vào danh sách
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return goals; // Trả về danh sách
     }
 
     public Goal getGoalById(int goalId) {

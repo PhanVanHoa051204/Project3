@@ -42,7 +42,7 @@ if (budgets.isEmpty()) {
 				<td><%=(budget.getMonth() != null) ? budget.getMonth().toString() : "N/A"%></td>
 				<td><a
 					href="updatebudget.jsp?budget_id=<%=budget.getBudgetId()%>"
-					class="btn btn-warning">Sửa</a> <a
+					class="btn btn-warning btn-sm">Sửa</a> <a
 					href="${pageContext.request.contextPath }/budgets?action=delete&budget_id=<%= budget.getBudgetId() %>"
 					class="btn btn-danger btn-sm"
 					onclick="return confirm ('Ban muon xoa chu');">Xoá</a></td>

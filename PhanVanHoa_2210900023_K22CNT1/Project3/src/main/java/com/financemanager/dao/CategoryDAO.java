@@ -54,6 +54,7 @@ public class CategoryDAO {
 	// Lấy tất cả danh mục từ cơ sở dữ liệu
 	public List<Category> getAllCategories() {
 	    List<Category> categories = new ArrayList<>();
+	    
 	    String query = "SELECT * FROM categories";
 	    try (Statement stmt = connection.createStatement();
 	         ResultSet rs = stmt.executeQuery(query)) {
@@ -69,6 +70,28 @@ public class CategoryDAO {
 	    }
 	    return categories;
 	}
+	// Lấy danh sách danh mục theo userId
+    public List<Category> getCategoriesByUserId(int userId) {
+        List<Category> categories = new ArrayList<>();
+        String sql = "SELECT * FROM categories WHERE user_id = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                int categoryId = resultSet.getInt("category_id");
+                String categoryName = resultSet.getString("category_name");
+                int fetchedUserId = resultSet.getInt("user_id");
+
+                Category category = new Category(categoryId, categoryName, fetchedUserId);
+                categories.add(category);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return categories;
+    }
 	
 	// Lấy danh mục theo ID
 	public Category getCategoryById(int categoryId) {

@@ -1,0 +1,58 @@
+/* Sidebar */
+.sidebar {
+    width: 250px; /* Điều chỉnh độ rộng của sidebar */
+    position: fixed; /* Đảm bảo sidebar luôn cố định khi cuộn trang */
+    top: 0;
+    left: 0;
+    height: 100vh;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-right: 2px solid #ddd;
+    box-shadow: 2px 0px 5px rgba(0,0,0,0.1); /* Thêm bóng đổ cho sidebar */
+}
+
+.sidebar .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.sidebar ul {
+    padding-left: 0;
+    list-style-type: none;
+}
+
+.sidebar ul li {
+    margin-bottom: 10px;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: #333;
+    padding: 10px;
+    display: block;
+    border-radius: 5px;
+}
+
+.sidebar ul li a:hover {
+    background-color: #ddd;
+}
+
+/* Main Content */
+.main-content {
+    margin-left: 250px; /* Đẩy nội dung chính sang phải để không bị che khuất bởi sidebar */
+    padding: 20px;
+}
+
+/* Khi kích thước màn hình nhỏ, sidebar sẽ ẩn đi và chuyển sang dạng menu hamburger */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        position: relative;
+        height: auto;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+}
